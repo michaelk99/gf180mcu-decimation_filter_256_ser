@@ -1,7 +1,6 @@
-/*
- * Copyright (c) 2025 Michael Koefinger
- * SPDX-License-Identifier: Apache-2.0
- */
+// Michael Koefinger
+// 26.11.2025
+// Deserializer
 
 module deserializer_22bit (
     input  wire        clk,            // System Clock (65,536 Hz)

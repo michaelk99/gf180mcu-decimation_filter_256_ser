@@ -1,7 +1,5 @@
-/*
- * Copyright (c) 2025 Michael Koefinger
- * SPDX-License-Identifier: Apache-2.0
- */
+// Michael Koefinger
+// 18.11.2025
 // 8-Stage Half-Band Filter Decimator using Saramaki HBFs'
 
 
@@ -17,7 +15,7 @@ module csd_mult_f11 #(
 );
     localparam SHIFT_MAX = 9;
     // Calculate internal width needed to avoid overflow during shift (Input + Shift + Guard)
-    localparam SUM_W = DATA_W + SHIFT_MAX + 3;
+    localparam SUM_W = DATA_W + SHIFT_MAX + 1;
     
     // 1. Sign-extend input to full internal width
     wire signed [SUM_W-1:0] data_wide = {{(SUM_W-DATA_W){data_in[DATA_W-1]}}, data_in};
@@ -30,8 +28,10 @@ module csd_mult_f11 #(
     wire signed [SUM_W-1:0] rnd_const = {{(SUM_W-1){1'b0}}, 1'b1}; 
     wire signed [SUM_W-1:0] rnd = sum + (rnd_const <<< (SHIFT_MAX - 1));
     
+    /* verilator lint_off UNUSEDSIGNAL */
     // 4. Final division (Arithmetic Right Shift)
     wire signed [SUM_W-1:0] rnd_shifted = rnd >>> SHIFT_MAX;
+    /* verilator lint_on UNUSEDSIGNAL */
     
     // 5. Explicitly select the lower bits to match output width
     assign data_out = rnd_shifted[DATA_W-1:0];
@@ -45,12 +45,14 @@ module csd_mult_f12 #(
     output wire signed [DATA_W-1:0] data_out
 );
     localparam SHIFT_MAX = 8;
-    localparam SUM_W = DATA_W + SHIFT_MAX + 3;
+    localparam SUM_W = DATA_W + SHIFT_MAX + 1;
     wire signed [SUM_W-1:0] data_wide = {{(SUM_W-DATA_W){data_in[DATA_W-1]}}, data_in};
     wire signed [SUM_W-1:0] sum = -((data_wide <<< 7) + (data_wide <<< 5) + data_wide);
     wire signed [SUM_W-1:0] rnd_const = {{(SUM_W-1){1'b0}}, 1'b1}; 
     wire signed [SUM_W-1:0] rnd = sum + (rnd_const <<< (SHIFT_MAX - 1));
+    /* verilator lint_off UNUSEDSIGNAL */
     wire signed [SUM_W-1:0] rnd_shifted = rnd >>> SHIFT_MAX;
+    /* verilator lint_on UNUSEDSIGNAL */
     assign data_out = rnd_shifted[DATA_W-1:0];
 endmodule
 
@@ -61,12 +63,14 @@ module csd_mult_f13 #(
     output wire signed [DATA_W-1:0] data_out
 );
     localparam SHIFT_MAX = 9;
-    localparam SUM_W = DATA_W + SHIFT_MAX + 3;
+    localparam SUM_W = DATA_W + SHIFT_MAX + 1;
     wire signed [SUM_W-1:0] data_wide = {{(SUM_W-DATA_W){data_in[DATA_W-1]}}, data_in};
     wire signed [SUM_W-1:0] sum = (data_wide <<< 7) - (data_wide <<< 5) + data_wide;
     wire signed [SUM_W-1:0] rnd_const = {{(SUM_W-1){1'b0}}, 1'b1}; 
     wire signed [SUM_W-1:0] rnd = sum + (rnd_const <<< (SHIFT_MAX - 1));
+    /* verilator lint_off UNUSEDSIGNAL */
     wire signed [SUM_W-1:0] rnd_shifted = rnd >>> SHIFT_MAX;
+    /* verilator lint_on UNUSEDSIGNAL */
     assign data_out = rnd_shifted[DATA_W-1:0];
 endmodule
 
@@ -77,12 +81,14 @@ module csd_mult_f21 #(
     output wire signed [DATA_W-1:0] data_out
 );
     localparam SHIFT_MAX = 12;
-    localparam SUM_W = DATA_W + SHIFT_MAX + 3;
+    localparam SUM_W = DATA_W + SHIFT_MAX + 1;
     wire signed [SUM_W-1:0] data_wide = {{(SUM_W-DATA_W){data_in[DATA_W-1]}}, data_in};
     wire signed [SUM_W-1:0] sum = (data_wide <<< 11) + (data_wide <<< 8) + data_wide;
     wire signed [SUM_W-1:0] rnd_const = {{(SUM_W-1){1'b0}}, 1'b1}; 
     wire signed [SUM_W-1:0] rnd = sum + (rnd_const <<< (SHIFT_MAX - 1));
+    /* verilator lint_off UNUSEDSIGNAL */
     wire signed [SUM_W-1:0] rnd_shifted = rnd >>> SHIFT_MAX;
+    /* verilator lint_on UNUSEDSIGNAL */
     assign data_out = rnd_shifted[DATA_W-1:0];
 endmodule
 
@@ -93,12 +99,14 @@ module csd_mult_f22 #(
     output wire signed [DATA_W-1:0] data_out
 );
     localparam SHIFT_MAX = 14;
-    localparam SUM_W = DATA_W + SHIFT_MAX + 3;
+    localparam SUM_W = DATA_W + SHIFT_MAX + 1;
     wire signed [SUM_W-1:0] data_wide = {{(SUM_W-DATA_W){data_in[DATA_W-1]}}, data_in};
     wire signed [SUM_W-1:0] sum = data_wide - (data_wide <<< 10) - (data_wide <<< 6);
     wire signed [SUM_W-1:0] rnd_const = {{(SUM_W-1){1'b0}}, 1'b1}; 
     wire signed [SUM_W-1:0] rnd = sum + (rnd_const <<< (SHIFT_MAX - 1));
+    /* verilator lint_off UNUSEDSIGNAL */
     wire signed [SUM_W-1:0] rnd_shifted = rnd >>> SHIFT_MAX;
+    /* verilator lint_on UNUSEDSIGNAL */
     assign data_out = rnd_shifted[DATA_W-1:0];
 endmodule
 // ***************************************************************
