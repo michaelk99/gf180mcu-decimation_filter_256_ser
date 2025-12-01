@@ -14,7 +14,7 @@ cd $(dirname "$0")
 source sak-pdk-script.sh gf180mcuD gf180mcu_fd_sc_mcu7t5v0 > /dev/null
 
 # Run LibreLane
-librelane --manual-pdk config.json
+librelane --manual-pdk --run-tag latest --overwrite config.yaml
 
 # Open Layout in OpenROAD GUI
-librelane --manual-pdk config.json --last-run --flow OpenInOpenROAD
+librelane --manual-pdk --last-run config.yaml --flow OpenInOpenROAD
